@@ -4,18 +4,16 @@
 
 ## 🎯 Vision du projet
 
-Fastclique est une plateforme de livraison rapide multi-commerce. Le projet est né d'un ancien concept centré uniquement sur l'alimentation (à Marseille), aujourd'hui repositionné pour couvrir bien plus large : tous types de commerces, pas seulement l'alimentaire.
+Fastclique est une plateforme de livraison rapide multi-commerce.
 
-L'idée est d'adapter l'application/site existant à cette nouvelle vision, plutôt que de repartir de zéro, si la structure actuelle peut être réutilisée.
 
 ## 🚀 Phase 1 — Lancement
 
 Le lancement se concentre sur les **commerces de proximité** :
-- Alimentations, épiceries, supérettes
+- Alimentations,
 - Boulangeries
 - Restaurants
-- Pharmacies
-- Autres commerces de proximité
+- Et aussi un service a la personne (babysitting,laveur de voiture,coiffeur indépendant et aide au déménagement)
 
 ## 📈 Développement futur
 
@@ -26,6 +24,9 @@ Une fois la phase 1 stabilisée, la plateforme a vocation à s'ouvrir aux **gran
 - Électronique
 - Et d'autres secteurs à définir
 
+Le but est d'obtenir des contrats avec des grande marque pour leur proposer notre système de livraison rapide qui se fait en moins de 30min.
+
+
 ## 🏬 MyAlim by Fastclique
 
 Un projet futur consiste à créer sa propre enseigne d'alimentation, **MyAlim by Fastclique**, basée sur le concept actuel d'Alim 13, disponible directement sur la plateforme Fastclique.
@@ -34,45 +35,86 @@ La signature **« by Fastclique »** est pensée comme une marque de groupe, des
 
 ## 🔄 État du repositionnement
 
-L'application (encore nommée « My Alim » en interne) est en cours de bascule vers l'identité Fastclique. Ce qui reste à faire :
-- [ ] Remplacer l'identité My Alim par Fastclique dans les écrans, textes et métadonnées
-- [ ] Introduire les catégories de commerces et permettre le parcours catégorie → commerce → produits
-- [ ] Préserver la carte, la recherche, le panier et les commandes avec un vocabulaire multi-commerce
-- [ ] Vérifier l'affichage et le parcours sur ordinateur et mobile ; préciser les limites du paiement et du suivi simulés
+L'application est en cour de développement il a atteint un stafe ou il peut etre publier 
+
+**Clients**
+- Parcourir les commerces, promos et panier sans compte
+- Commande, paiement, suivi en temps réel, code de remise
+- Favoris, avis commerce/livreur, services à la personne (rendez-vous)
+
+**Commerçants**
+- Dossier d'inscription, formules d'abonnement
+- Catalogue avec photos, stock, variantes, promos
+- Commandes, rendez-vous, graphiques de ventes
+
+**Livreurs**
+- Dossier, choix du secteur, offres de course
+- Position en temps réel, historique, gains, retraits
+
+**Admin**
+- Validation des dossiers, tarifs et formules
+- Retraits, modération des avis, boutique officielle
+
+> État : paiements Stripe en mode test, e-mails non activés.
+
 
 ## 🛠️ Stack technique
 
-- **Framework** : [TanStack Start](https://tanstack.com/start) (React 19 + TanStack Router + Vite)
-- **UI** : Tailwind CSS 4, shadcn/ui (Radix UI), lucide-react
-- **Formulaires / validation** : React Hook Form + Zod
-- **Carte** : Leaflet
-- **Autres** : TanStack Query, Recharts, date-fns, Sonner
-- **Outillage** : TypeScript, ESLint, Prettier, Bun (lockfile)
+- **Front** : React 19, TanStack Start, Vite 7, composants shadcn/ui
+- **Back** : fonctions serveur TanStack Start, déployées sur Cloudflare Workers
+- **Base de données** : PostgreSQL (Supabase via Lovable Cloud), sécurité par RLS, migrations Drizzle
+- **Authentification** : e-mail avec vérification, mot de passe oublié, Google
+- **Paiements** : Stripe (mode test), webhook signé
+- **IA** : Lovable AI (recherche d'articles)
+- **Cartes** : Google Maps
+- **Outils** : Bun, TypeScript, ESLint, Prettier
 - Développée avec [Lovable](https://lovable.dev)
 
 ## 📂 Structure du projet
 
-```
-src/
-├── routes/                  # Pages (file-based routing TanStack Router)
-│   ├── index.tsx             # Accueil
-│   ├── auth.tsx               # Connexion / choix du profil
-│   ├── boutiques.tsx          # Liste des commerces
-│   ├── commerce.$commerceId.tsx  # Fiche commerce
-│   ├── panier.tsx             # Panier
-│   ├── commandes.tsx          # Suivi de commande
-│   └── espace-commerce.tsx    # Espace commerçant
-├── components/               # Composants (AppHeader, CarteProximite, SuiviCommande...)
-│   └── ui/                   # Composants shadcn/ui
-├── lib/                      # Logique (panier, commandes, session, données)
-└── styles.css
-```
+## Structure du projet
+
+    src/
+    ├── routes/                      # Pages (routage par fichiers, TanStack Router)
+    │   ├── index.tsx                # Accueil
+    │   ├── auth.tsx                 # Connexion / choix du profil
+    │   ├── reset-password.tsx       # Mot de passe oublié
+    │   ├── boutiques.tsx            # Liste des commerces
+    │   ├── commerce.$commerceId.tsx # Fiche commerce
+    │   ├── promotions.tsx           # Promotions
+    │   ├── services.tsx             # Services à la personne
+    │   ├── panier.tsx               # Panier
+    │   ├── paiement.retour.tsx      # Retour de paiement
+    │   ├── commandes.tsx            # Suivi de commande
+    │   ├── profil.tsx               # Profil client
+    │   ├── contact.tsx              # Contact
+    │   ├── devenir-commercant.tsx   # Inscription commerçant
+    │   ├── espace-commerce.tsx      # Espace commerçant
+    │   ├── livreur.*.tsx            # Espace livreur (courses, dossier, gains, historique, avis)
+    │   ├── admin.tsx                # Espace admin
+    │   └── api/public/payments/     # Webhook de paiement
+    ├── components/                  # Composants (AppHeader, CarteProximite, SuiviCommande...)
+    │   ├── avis/                    # Notes et avis
+    │   └── ui/                      # Composants shadcn/ui
+    ├── lib/                         # Logique (panier, commandes, session, paiements, e-mails)
+    ├── integrations/                # Connexion à la base (Supabase)
+    └── styles.css
+    drizzle/                         # Schéma et migrations de la base
+    scripts/                         # Tests SQL
+
 
 ## 🚀 Démarrage local
 
-```sh
-git clone <url-du-repo>
-cd <nom-du-repo>
-npm i
-npm run dev
-```
+## Démarrage en local
+
+Prérequis : Node.js 22+ et Bun (ou npm).
+
+    git clone <url-du-dépôt>
+    cd <nom-du-dépôt>
+    bun install      # ou : npm install
+    bun run dev      # ou : npm run dev
+
+Autres commandes : `build`, `preview`, `lint`, `format`.
+
+Les clés (Cloud, Stripe, webhook) se renseignent dans un fichier `.env` local. Ne jamais les publier.
+
